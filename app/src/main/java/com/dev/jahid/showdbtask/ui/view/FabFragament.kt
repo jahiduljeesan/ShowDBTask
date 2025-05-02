@@ -43,7 +43,6 @@ class FabFragament : Fragment() {
         }
         binding.listRecycler.adapter = adapter
 
-        viewmodel.getFavorites(ApiConstance.ACCOUNT_ID)
         viewmodel.favorites.observe(viewLifecycleOwner) {
             Log.d("FavoriteListSize","${it.size}")
             adapter.submitList(it)

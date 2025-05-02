@@ -1,20 +1,13 @@
 package com.dev.jahid.showdbtask.ui.view
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.dev.jahid.showdbtask.R
+import com.dev.jahid.showdbtask.data.model.FavoriteRequestBody
 import com.dev.jahid.showdbtask.databinding.ActivityDetailBinding
-import com.dev.jahid.showdbtask.databinding.ActivityMainBinding
 import com.dev.jahid.showdbtask.ui.adapter.MovieAdapter
 import com.dev.jahid.showdbtask.ui.viewmodel.MovieViewmodel
 import com.dev.jahid.showdbtask.utils.ApiConstance
@@ -31,9 +24,15 @@ class DetailActivity : AppCompatActivity() {
 
         viewmodel = ViewModelProvider(this)[MovieViewmodel::class.java]
 
-        var id: Int = intent.getIntExtra("movie_id",-1)
-        setData(id)
+        //button arrow back
+        binding.btnArrowBack.setOnClickListener {
+            finish()
+        }
 
+        var id: Int = intent.getIntExtra("movie_id",-1)
+        setData(id) // setting data to activity views
+
+        //setting data to recycler view list.....................
         binding.recyclerSimilarMovies.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL,false)
         movieAdapter = MovieAdapter{
             setData(it.id)
@@ -44,13 +43,28 @@ class DetailActivity : AppCompatActivity() {
         viewmodel.relatedList.observe(this) {
             movieAdapter.submitList(it)
         }
+        //..........................................
 
-        binding.btnFavorite.setOnClickListener {
-           viewmodel.setFavoriteMovie(ApiConstance.ACCOUNT_ID,
-               FavoriteRequestBody("movie",id,true))
-               .observe(this) {
-                   Toast.makeText(this, "${it.status_message}", Toast.LENGTH_SHORT).show()
-               }
+
+        viewmodel.favorites.observe(this) {
+            val isFavorite = it.any {
+                id == it.id
+            }
+
+            if (isFavorite) {
+                binding.btnFavorite.text = "🖤 Favorite"
+            }else {
+                binding.btnFavorite.text = "Add to Favorite"
+                binding.btnFavorite.setOnClickListener {
+                    viewmodel.setFavoriteMovie(ApiConstance.ACCOUNT_ID,
+                        FavoriteRequestBody("movie", id, true)
+                    )
+                        .observe(this) {
+                            Toast.makeText(this, "${it.status_message}", Toast.LENGTH_SHORT).show()
+                            if (it.status_message == "Success.") binding.btnFavorite.text = "🖤 Favorite"
+                        }
+                }
+            }
         }
 
 

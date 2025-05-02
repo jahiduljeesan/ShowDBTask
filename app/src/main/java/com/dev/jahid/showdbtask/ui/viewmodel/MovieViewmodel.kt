@@ -1,14 +1,13 @@
 package com.dev.jahid.showdbtask.ui.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.dev.jahid.showdbtask.data.model.Movie
 import com.dev.jahid.showdbtask.data.repository.MovieRepository
-import com.dev.jahid.showdbtask.ui.view.FavoriteRequestBody
+import com.dev.jahid.showdbtask.data.model.FavoriteRequestBody
 import com.dev.jahid.showdbtask.utils.ApiConstance
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,6 +22,7 @@ class MovieViewmodel : ViewModel() {
 
     init {
         getPopularMovies()
+        getFavorites(ApiConstance.ACCOUNT_ID)
     }
 
     fun getPopularMovies() {

@@ -2,17 +2,14 @@ package com.dev.jahid.showdbtask.data.api
 
 import com.dev.jahid.showdbtask.data.model.Movie
 import com.dev.jahid.showdbtask.data.model.MovieResponse
-import com.dev.jahid.showdbtask.ui.view.FavoriteRequestBody
-import com.dev.jahid.showdbtask.ui.view.FavoriteResponse
+import com.dev.jahid.showdbtask.data.model.FavoriteRequestBody
+import com.dev.jahid.showdbtask.data.model.FavoriteResponse
 import com.dev.jahid.showdbtask.utils.ApiConstance
-import okhttp3.ResponseBody
-import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface MovieApi {
     @GET("movie/popular")

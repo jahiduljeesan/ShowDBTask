@@ -26,6 +26,18 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent=".98" />
 
+        <ImageView
+            android:id="@+id/btnArrowBack"
+            android:layout_width="@dimen/_24sdp"
+            android:layout_height="@dimen/_24sdp"
+            android:contentDescription="Back"
+            android:elevation="1dp"
+            android:src="@drawable/ic_arrow_back"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_marginStart="@dimen/_8sdp"
+            app:layout_constraintStart_toStartOf="@id/guidelineStart"
+            app:layout_constraintTop_toTopOf="parent"/>
+
     <ImageView
         android:id="@+id/imgPoster"
         android:layout_width="0dp"

@@ -1,4 +1,4 @@
-package com.dev.jahid.showdbtask.ui.view
+package com.dev.jahid.showdbtask.data.model
 
 data class FavoriteResponse(
     val status_code: Int,
