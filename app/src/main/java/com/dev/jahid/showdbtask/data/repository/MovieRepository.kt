@@ -8,6 +8,7 @@ import retrofit2.Response
 
 class MovieRepository {
     val api = RetrofitInstance.api
+    //for commit
 
     suspend fun getPopularMovies() = api.getPopularMovies()
     suspend fun getMovieDetails(id: Int) = api.movieDetails(id)
