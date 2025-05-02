@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.ShowDBTask" parent="Theme.Material3.Light.NoActionBar">
+         <item name="colorPrimary">#8C8383</item>
+         <item name="colorSecondary">#F6EBEB</item>
+         <item name="statusBarBackground">#8C8383</item>
+    </style>
+    <style name="Rounded4Shape" parent="">
+        <item name="cornerSize">4dp</item>
+    </style>
+
+    <style name="Theme.ShowDBTask" parent="Base.Theme.ShowDBTask" />
+</resources>
