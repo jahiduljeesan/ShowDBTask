@@ -13,7 +13,7 @@ class MovieRepository {
     suspend fun getMovieDetails(id: Int) = api.movieDetails(id)
     suspend fun getRelatedList(id:Int) = api.getRelatedList(id)
 
-    suspend fun getFavorites(id:Int) = api.getFavorites(id)
+    suspend fun getFavorites(accountId:Int) = api.getFavorites(accountId)
 
     suspend fun setFavorite(accountId: Int,favoriteRequestBody: FavoriteRequestBody) = api.setMovieFavorite(ApiConstance.ACCOUNT_ID,
         favoriteRequestBody)

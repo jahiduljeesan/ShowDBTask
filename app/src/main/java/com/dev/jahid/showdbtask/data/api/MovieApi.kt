@@ -20,6 +20,12 @@ interface MovieApi {
         @Header("Authorization") auth: String = "Bearer ${ApiConstance.ACCESS_TOKEN}"
     ): MovieResponse
 
+    @GET("account/{account_id}/favorite/movies")
+    suspend fun getFavorites(
+        @Path("account_id") accountId: Int,
+        @Header("Authorization") auth: String = "Bearer ${ApiConstance.ACCESS_TOKEN}"
+    ): MovieResponse
+
     @GET("movie/{movie_id}")
     suspend fun movieDetails(
         @Path("movie_id") id:Int,
@@ -39,10 +45,6 @@ interface MovieApi {
         @Header("Authorization") auth: String = "Bearer ${ApiConstance.ACCESS_TOKEN}",
     ): FavoriteResponse
 
-    @GET("account/{account_id}/favorite/movies")
-    suspend fun getFavorites(
-        @Path("account_id") accountId: Int,
-        @Header("Authentication") auth: String = "Bearer ${ApiConstance.ACCESS_TOKEN}"
-    ): MovieResponse
+
 
 }

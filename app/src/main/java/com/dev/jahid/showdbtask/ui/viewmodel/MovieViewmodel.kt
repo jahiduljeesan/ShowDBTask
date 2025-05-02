@@ -23,7 +23,6 @@ class MovieViewmodel : ViewModel() {
 
     init {
         getPopularMovies()
-
     }
 
     fun getPopularMovies() {
@@ -63,9 +62,11 @@ class MovieViewmodel : ViewModel() {
     fun getFavorites(id: Int) {
         viewModelScope.launch {
             try {
-                favorites.value = repo.getFavorites(id).results
+                favorites.value = repo.getFavorites(id).results?:emptyList()
+                Log.d("FavoriteListCheck","I am in try")
             }catch (e: Exception) {
                 e.printStackTrace()
+                Log.d("FavoriteListCheck","I am in catch")
             }
         }
     }
