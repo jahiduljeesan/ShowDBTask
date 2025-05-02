@@ -36,7 +36,6 @@ class HomeFragment : Fragment() {
         movieViewmodel = ViewModelProvider(this)[MovieViewmodel::class.java]
         binding.listRecycler.layoutManager = LinearLayoutManager(requireContext())
         adapter = MovieAdapter{
-            Toast.makeText(requireContext(), "$it.title number position", Toast.LENGTH_SHORT).show()
             val intent = Intent(requireActivity(), DetailActivity::class.java)
             intent.putExtra("movie_id", it.id)
             startActivity(intent)

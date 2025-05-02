@@ -31,12 +31,13 @@ class DetailActivity : AppCompatActivity() {
 
         viewmodel = ViewModelProvider(this)[MovieViewmodel::class.java]
 
-        val id: Int = intent.getIntExtra("movie_id",-1)
+        var id: Int = intent.getIntExtra("movie_id",-1)
         setData(id)
 
         binding.recyclerSimilarMovies.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL,false)
         movieAdapter = MovieAdapter{
             setData(it.id)
+            id = it.id
         }
         binding.recyclerSimilarMovies.adapter = movieAdapter
 
@@ -45,8 +46,11 @@ class DetailActivity : AppCompatActivity() {
         }
 
         binding.btnFavorite.setOnClickListener {
-            viewmodel.addMovieToFavorites(ApiConstance.ACCOUNT_ID, ApiConstance.SESSION_ID, id)
-            Toast.makeText(this, "Added to favorite", Toast.LENGTH_SHORT).show()
+           viewmodel.setFavoriteMovie(ApiConstance.ACCOUNT_ID,
+               FavoriteRequestBody("movie",id,true))
+               .observe(this) {
+                   Toast.makeText(this, "${it.status_message}", Toast.LENGTH_SHORT).show()
+               }
         }
 
 

@@ -13,13 +13,8 @@ class MovieRepository {
     suspend fun getMovieDetails(id: Int) = api.movieDetails(id)
     suspend fun getRelatedList(id:Int) = api.getRelatedList(id)
 
-    suspend fun addFavorite(accountId: String, sessionId: String, movieId: Int): Boolean {
-        val body = FavoriteRequestBody(media_id = movieId, favorite = true)
-        val response = api.markAsFavorite(accountId, sessionId, body)
-        return response.isSuccessful
-    }
-    suspend fun getFavorites(accountId: String, sessionId: String): List<Movie>? {
-        val response = api.getFavoriteMovies(accountId, sessionId)
-        return if (response.isSuccessful) response.body()?.results else null
-    }
+    suspend fun getFavorites(id:Int) = api.getFavorites(id)
+
+    suspend fun setFavorite(accountId: Int,favoriteRequestBody: FavoriteRequestBody) = api.setMovieFavorite(ApiConstance.ACCOUNT_ID,
+        favoriteRequestBody)
 }

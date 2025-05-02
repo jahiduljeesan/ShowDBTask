@@ -37,19 +37,12 @@ interface MovieApi {
         @Path("account_id") accountId: Int,
         @Body body: FavoriteRequestBody,
         @Header("Authorization") auth: String = "Bearer ${ApiConstance.ACCESS_TOKEN}",
-    ): Response<FavoriteResponse>
-
-    @POST("account/{account_id}/favorite")
-    suspend fun markAsFavorite(
-        @Path("account_id") accountId: String,
-        @Query("session_id") sessionId: String,
-        @Body body: FavoriteRequestBody
-    ): Response<FavoriteResponse>
+    ): FavoriteResponse
 
     @GET("account/{account_id}/favorite/movies")
-    suspend fun getFavoriteMovies(
-        @Path("account_id") accountId: String,
-        @Query("session_id") sessionId: String
-    ): Response<MovieResponse>
+    suspend fun getFavorites(
+        @Path("account_id") accountId: Int,
+        @Header("Authentication") auth: String = "Bearer ${ApiConstance.ACCESS_TOKEN}"
+    ): MovieResponse
 
 }

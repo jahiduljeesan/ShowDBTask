@@ -4,10 +4,13 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.dev.jahid.showdbtask.data.model.Movie
 import com.dev.jahid.showdbtask.data.repository.MovieRepository
+import com.dev.jahid.showdbtask.ui.view.FavoriteRequestBody
 import com.dev.jahid.showdbtask.utils.ApiConstance
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MovieViewmodel : ViewModel() {
@@ -16,10 +19,7 @@ class MovieViewmodel : ViewModel() {
     val movieList = MutableLiveData<List<Movie>>()
     val movieDetails = MutableLiveData<Movie>()
     val relatedList = MutableLiveData<List<Movie>>()
-    val requestTokenLiveData = MutableLiveData<String>()
-
-    private val _favorites = MutableLiveData<List<Movie>>()
-    val favorites: LiveData<List<Movie>> = _favorites
+    val favorites = MutableLiveData<List<Movie>>()
 
     init {
         getPopularMovies()
@@ -60,20 +60,24 @@ class MovieViewmodel : ViewModel() {
         }
     }
 
-    fun addMovieToFavorites(accountId: String, sessionId: String, movieId: Int) {
+    fun getFavorites(id: Int) {
         viewModelScope.launch {
-            val success = repo.addFavorite(accountId, sessionId, movieId)
-            if (success) {
-                // refresh list or show toast
-                getFavoriteMovies(accountId, sessionId)
+            try {
+                favorites.value = repo.getFavorites(id).results
+            }catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
 
-    fun getFavoriteMovies(accountId: String, sessionId: String) {
-        viewModelScope.launch {
-            _favorites.value = repo.getFavorites(accountId, sessionId)
-        }
+
+    fun setFavoriteMovie(accountId: Int,favoriteRequestBody: FavoriteRequestBody) = liveData(Dispatchers.IO) {
+       try {
+           val favoriteResponse = repo.setFavorite(accountId,favoriteRequestBody)
+           emit(favoriteResponse)
+       }catch (e: Exception) {
+           e.printStackTrace()
+       }
     }
 
 }
