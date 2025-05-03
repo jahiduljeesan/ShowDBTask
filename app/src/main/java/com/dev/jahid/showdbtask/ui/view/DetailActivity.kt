@@ -1,6 +1,7 @@
 package com.dev.jahid.showdbtask.ui.view
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -17,6 +18,7 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
     private lateinit var viewmodel: MovieViewmodel;
     private lateinit var movieAdapter: MovieAdapter
+    private var isFab = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
@@ -29,12 +31,13 @@ class DetailActivity : AppCompatActivity() {
             finish()
         }
 
-        var id: Int = intent.getIntExtra("movie_id",-1)
+        var id: Int = intent.getIntExtra("movie_id", -1)
         setData(id) // setting data to activity views
 
         //setting data to recycler view list.....................
-        binding.recyclerSimilarMovies.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL,false)
-        movieAdapter = MovieAdapter{
+        binding.recyclerSimilarMovies.layoutManager =
+            LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+        movieAdapter = MovieAdapter {
             setData(it.id)
             id = it.id
         }
@@ -45,30 +48,43 @@ class DetailActivity : AppCompatActivity() {
         }
         //..........................................
 
-
-        viewmodel.favorites.observe(this) {
-            val isFavorite = it.any {
-                id == it.id
+        viewmodel.favoriteList.observe(this) {
+            isFab = it.any {
+                it.id == id }
+            Log.d("Checkxyz","$isFab is fab")
+            if (isFab) {
+                binding.btnFavorite.text = "Remove from Favorites"
+            } else {
+                binding.btnFavorite.text = "Add to Favorites"
             }
 
-            if (isFavorite) {
-                binding.btnFavorite.text = "🖤 Favorite"
-            }else {
-                binding.btnFavorite.text = "Add to Favorite"
-                binding.btnFavorite.setOnClickListener {
-                    viewmodel.setFavoriteMovie(ApiConstance.ACCOUNT_ID,
-                        FavoriteRequestBody("movie", id, true)
-                    )
-                        .observe(this) {
-                            Toast.makeText(this, "${it.status_message}", Toast.LENGTH_SHORT).show()
-                            if (it.status_message == "Success.") binding.btnFavorite.text = "🖤 Favorite"
-                        }
+            binding.btnFavorite.setOnClickListener {
+                // Send the opposite of current state
+                setFavoriteMovie(isFab, id).observe(this) {
+                    Toast.makeText(this, it.status_message, Toast.LENGTH_SHORT).show()
+                    isFab = !isFab
+                    binding.btnFavorite.text = if (isFab) {
+                        "Remove from Favorites"
+                    } else {
+                        "Add to Favorites"
+                    }
+
+                    viewmodel.getFavorites(ApiConstance.ACCOUNT_ID)
                 }
             }
         }
 
 
+
     }
+
+
+    private fun setFavoriteMovie(isFavorite: Boolean, id: Int)=
+        viewmodel.setFavoriteMovie(ApiConstance.ACCOUNT_ID, FavoriteRequestBody(
+            "movie",id,!isFavorite
+        ))
+
+
     fun setData(id: Int) {
         if (id > 0) {
             viewmodel.getMovieDetails(id)
